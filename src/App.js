@@ -1,4 +1,5 @@
-import { Formik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import TextInput from "./components/TextInput";
 
 const validate = (values) => {
   const errors = {};
@@ -22,28 +23,25 @@ function App() {
       validate={validate}
       onSubmit={(values) => console.log(values)}
     >
-      {(formik) => (
-        <form onSubmit={formik.handleSubmit}>
-          <label>Name</label>
-          <input type="text" {...formik.getFieldProps("name")} />
-          {formik.touched.name && formik.errors.name ? (
-            <div>{formik.errors.name}</div>
-          ) : null}
-          <br />
-          <label>Last Name</label>
-          <input type="text" {...formik.getFieldProps("lastName")} />
-          {formik.touched.lastName && formik.errors.lastName && (
-            <div>{formik.errors.lastName}</div>
-          )}
-          <br />
-          <label>Email</label>
-          <input type="email" {...formik.getFieldProps("email")} />
-          {formik.touched.email && formik.errors.email && (
-            <div>{formik.errors.email}</div>
-          )}
-          <button type="submit">Send</button>
-        </form>
-      )}
+      <Form>
+        <label>Name</label>
+        <TextInput name="nombre" label="Nombre" />
+        <Field name="name" type="text" />
+        <Field name="select" as="select">
+          <option value="chanchitofeliz">Chanchito feliz</option>
+          <option value="chanchitotriste">Chanchito triste</option>
+        </Field>
+        <ErrorMessage name="name" />
+        <br />
+        <label>Last Name</label>
+        <Field name="lastName" type="text" />
+        <ErrorMessage name="lastName" />
+        <br />
+        <label>Email</label>
+        <Field name="email" type="email" />
+        <ErrorMessage name="email" />
+        <button type="submit">Send</button>
+      </Form>
     </Formik>
   );
 }
