@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import { useFormik } from "formik";
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.name) {
+    errors.name = "Required";
+  } else if (values.name.length < 5) {
+    errors.name = "Name must be at least 5 characters";
+  }
+  if (!values.lastName) {
+    errors.lastName = "Required";
+  } else if (values.lastName.length < 5) {
+    errors.lastName = "Last Name must be at least 5 characters";
+  }
+  return errors;
+};
 
 function App() {
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      lastName: "",
+      email: "",
+    },
+    validate,
+    onSubmit: (values) => console.log(values),
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <form onSubmit={formik.handleSubmit}>
+      <label>Name</label>
+      <input type="text" {...formik.getFieldProps("name")} />
+      {formik.touched.name && formik.errors.name ? (
+        <div>{formik.errors.name}</div>
+      ) : null}
+      <br />
+      <label>Last Name</label>
+      <input type="text" {...formik.getFieldProps("lastName")} />
+      {formik.touched.lastName && formik.errors.lastName && (
+        <div>{formik.errors.lastName}</div>
+      )}
+      <br />
+      <label>Email</label>
+      <input type="email" {...formik.getFieldProps("email")} />
+      {formik.touched.email && formik.errors.email && (
+        <div>{formik.errors.email}</div>
+      )}
+      <button type="submit">Send</button>
+    </form>
   );
 }
 
